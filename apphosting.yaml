@@ -1,0 +1,11 @@
+# Minimal App Hosting config
+# Docs: https://firebase.google.com/docs/app-hosting/configure
+runConfig:
+  minInstances: 0
+
+env:
+  - variable: NEXT_PUBLIC_SITE_NAME
+    value: "App Hosting smoke"
+    availability:
+      - BUILD
+      - RUNTIME
