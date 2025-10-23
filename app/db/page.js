@@ -54,6 +54,16 @@ export default function DbPage() {
     }
   }
 
+  function formatTimestamp(ts) {
+    if (!ts?.toDate) return '—'
+    try {
+      return ts.toDate().toLocaleString()
+    } catch (err) {
+      console.error('Failed to format timestamp', err)
+      return '—'
+    }
+  }
+
   return (
     <main style={{ padding: 24, fontFamily: 'system-ui' }}>
       <h1>Firestore minimal CRUD</h1>
@@ -75,9 +85,40 @@ export default function DbPage() {
         <button style={{ marginLeft: 8, padding: '8px 12px' }}>Add</button>
       </form>
 
-      <ul style={{ marginTop: 24 }}>
-        {items.map(it => <li key={it.id}>• {it.text || '(no text)'} </li>)}
-      </ul>
+      <section style={{ marginTop: 24 }}>
+        <h2 style={{ marginBottom: 12 }}>items collection</h2>
+        {items.length === 0 ? (
+          <p style={{ color: '#4b5563' }}>No documents yet — add your first item above.</p>
+        ) : (
+          <div style={{ overflowX: 'auto' }}>
+            <table
+              style={{
+                borderCollapse: 'collapse',
+                minWidth: 480,
+                width: '100%',
+                fontSize: 14
+              }}
+            >
+              <thead>
+                <tr style={{ background: '#f3f4f6' }}>
+                  <th style={{ textAlign: 'left', padding: '8px 12px', borderBottom: '1px solid #d1d5db' }}>Text</th>
+                  <th style={{ textAlign: 'left', padding: '8px 12px', borderBottom: '1px solid #d1d5db' }}>UID</th>
+                  <th style={{ textAlign: 'left', padding: '8px 12px', borderBottom: '1px solid #d1d5db' }}>Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map(it => (
+                  <tr key={it.id} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                    <td style={{ padding: '8px 12px' }}>{it.text || '(no text)'}</td>
+                    <td style={{ padding: '8px 12px', color: '#4b5563' }}>{it.uid ? `${it.uid.slice(0, 8)}…` : '—'}</td>
+                    <td style={{ padding: '8px 12px', color: '#4b5563' }}>{formatTimestamp(it.createdAt)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
     </main>
   )
 }
