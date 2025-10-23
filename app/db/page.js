@@ -10,6 +10,7 @@ export default function DbPage() {
   const [items, setItems] = useState([])
   const [dbStatus, setDbStatus] = useState('checking')
   const [dbError, setDbError] = useState(null)
+  const maskedKey = (process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '').slice(0, 6) + '…'
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, u => setUser(u))
@@ -92,6 +93,7 @@ export default function DbPage() {
           </span>
         )}
       </p>
+      <p style={{ opacity: 0.7 }}>apiKey(head): {maskedKey}</p>
 
       <form onSubmit={addItem} style={{ marginTop: 16 }}>
         <input
