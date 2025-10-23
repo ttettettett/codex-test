@@ -13,11 +13,18 @@ export default function DbPage() {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, u => setUser(u))
-    signInAnonymously(auth).catch(console.error)
+    signInAnonymously(auth).catch(err => {
+      console.error(err)
+      setDbStatus('error')
+      setDbError(err.message)
+    })
     return () => unsub()
   }, [])
 
   useEffect(() => {
+    if (!user) return
+
+    setDbStatus('checking')
     const q = query(collection(db, 'items'), orderBy('createdAt', 'desc'))
     const unsub = onSnapshot(
       q,
@@ -33,10 +40,16 @@ export default function DbPage() {
       }
     )
     return () => unsub()
-  }, [])
+  }, [user])
 
   async function addItem(e) {
     e.preventDefault()
+    if (!user) {
+      setDbStatus('error')
+      setDbError('Sign-in required before adding items.')
+      return
+    }
+
     if (!text.trim()) return
     try {
       await addDoc(collection(db, 'items'), {
@@ -81,8 +94,19 @@ export default function DbPage() {
       </p>
 
       <form onSubmit={addItem} style={{ marginTop: 16 }}>
-        <input value={text} onChange={e => setText(e.target.value)} placeholder="add item…" style={{ padding: 8, width: 240 }}/>
-        <button style={{ marginLeft: 8, padding: '8px 12px' }}>Add</button>
+        <input
+          value={text}
+          onChange={e => setText(e.target.value)}
+          placeholder="add item…"
+          style={{ padding: 8, width: 240 }}
+          disabled={!user || dbStatus === 'error'}
+        />
+        <button
+          style={{ marginLeft: 8, padding: '8px 12px' }}
+          disabled={!user || dbStatus === 'error'}
+        >
+          Add
+        </button>
       </form>
 
       <section style={{ marginTop: 24 }}>
