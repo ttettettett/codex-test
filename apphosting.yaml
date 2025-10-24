@@ -10,18 +10,22 @@ env:
       - BUILD
       - RUNTIME
   - variable: NEXT_PUBLIC_FIREBASE_API_KEY
-    value: "REPLACE_ME"
+    value: "AIzaSyAQk0fBONSGUqCNznf6Krs82Ap1-NV6J4o"
     availability:
       - BUILD
+      - RUNTIME
   - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
-    value: "REPLACE_ME"   # e.g. myapp.firebaseapp.com
+    value: "app-hosting-smoke.firebaseapp.com"
     availability:
       - BUILD
+      - RUNTIME
   - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
-    value: "REPLACE_ME"
+    value: "app-hosting-smoke"
     availability:
       - BUILD
+      - RUNTIME
   - variable: NEXT_PUBLIC_FIREBASE_APP_ID
-    value: "REPLACE_ME"
+    value: "1:403809813581:web:0950523fd2f2c1a1d7314f"
     availability:
       - BUILD
+      - RUNTIME
